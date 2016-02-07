@@ -73,7 +73,6 @@ def setup(hass, config):
 
         if state is None:
             return
-
         if state.state in (STATE_ON, STATE_LOCKED, STATE_ABOVE_HORIZON):
             _state = 1
         elif state.state in (STATE_OFF, STATE_UNLOCKED, STATE_UNKNOWN,
@@ -81,11 +80,11 @@ def setup(hass, config):
             _state = 0
         else:
             _state = state.state
-            if _state == '':
+            if _state == '' or state == '-':
                 return
             try:
-                _state = float(_state)
-            except ValueError:
+                _state = float(state.state)
+            except (ValueError, TypeError):
                 pass
 
         measurement = state.attributes.get('unit_of_measurement', state.domain)
